@@ -18,6 +18,7 @@ if (process.env.NODE_ENV === "development") {
       email,
       password
     });
+    res.send('holi')
     res.status(201).send(createdOwner);
 });
 }
