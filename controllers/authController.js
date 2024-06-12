@@ -3,7 +3,7 @@ const  bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const {generateToken} = require('../utils/generateToken');
 
-module.exports = async (req, res)=>{
+module.exports.registerUser = async (req, res)=>{
     try{
         const {email, password, fullName} = req.body;
 
@@ -32,4 +32,22 @@ module.exports = async (req, res)=>{
     }catch(err){
         res.send(err.message)
     }
-}
+};
+
+module.exports.loginUser = async (req, res)=>{
+    const {email, password} = req.body;
+
+    let user = await userModel.findOne({email});
+    if(!user) return res.send('Email or Password incorrect');
+
+    bcrypt.compare(password, user.password, (err, result)=>{
+        if(result){
+            let token = generateToken(user);
+            res.cookie('token', token);
+            res.send('yes you can login');
+        }
+        else{
+            res.send('Email or Password incorrect')
+        }
+    })
+};
