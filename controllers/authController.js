@@ -44,7 +44,7 @@ module.exports.loginUser = async (req, res)=>{
         if(result){
             let token = generateToken(user);
             res.cookie('token', token);
-            res.send('yes you can login');
+            res.redirect('/shop')
         }
         else{
             res.send('Email or Password incorrect')
